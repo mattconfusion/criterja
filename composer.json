@@ -1,0 +1,11 @@
+{
+    "autoload": {
+        "psr-4": {
+            "Criterja\\": "src/"
+        }
+    },
+    "require": {
+        "behat/gherkin": "^4.6",
+        "league/climate": "^3.5"
+    }
+}
