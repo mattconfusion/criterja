@@ -2,7 +2,7 @@
 
 namespace Criterja\gherkin;
 
-class Background {
+class Background implements CriteriaGroup{
 
     const BACKGROUND_TITLE_INDEX = 'title';
     const BACKGROUND_STEPS_INDEX = 'steps';
@@ -14,6 +14,11 @@ class Background {
     {
         $this->title = $title;
         $this->steps = $steps;
+    }
+
+    public function getKeyword(): string
+    {
+        return 'Background';
     }
 
     public function getTitle(): string

@@ -2,7 +2,7 @@
 
 namespace Criterja\gherkin;
 
-class Scenario {
+class Scenario implements CriteriaGroup{
 
     const SCENARIO_TITLE_INDEX = 'title';
     const SCENARIO_STEPS_INDEX = 'steps';
@@ -27,5 +27,15 @@ class Scenario {
     public function getSteps(): array
     {
         return $this->steps;
+    }
+
+    public function getKeyword(): string
+    {
+        return $this->scenarioType->getValue();
+    }
+
+    public function hasExamples(): bool
+    {
+        return $this->scenarioType->equals(ScenarioType::SCENARIO_OUTLINE());
     }
 }
