@@ -16,6 +16,7 @@ class AcceptanceCriteria
     public function __construct(FeatureFile $featureFile)
     {
         $this->parsedFile = $this->parseFeatureFile($featureFile->getContents());
+        var_dump($this->parsedFile);
     }
 
     /**
@@ -54,7 +55,7 @@ class AcceptanceCriteria
 
     public function getScenarios()
     {
-
+        
     }
 
     /**
