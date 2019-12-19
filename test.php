@@ -1,10 +1,13 @@
 <?php declare(strict_types=1);
 
-require __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
+require_once __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 
 use Criterja\gherkin\AcceptanceCriteria;
 use Criterja\utils\FeatureFile;
 use Criterja\gherkin\Step;
+use Criterja\gherkin\Scenario;
+use Criterja\gherkin\ScenarioType;
+use Criterja\gherkin\ScenarioTypeFactory;
 
 $file = new FeatureFile(__DIR__ . DIRECTORY_SEPARATOR . 'test.feature');
 
@@ -22,6 +25,10 @@ $steps = $ac->getBackground()->getSteps();
 \array_walk($steps, function (Step $step) {
     echo $step->getKeyword() . ' ' . $step->getCondition() . PHP_EOL;
 });
+
+echo "Scenarios" . PHP_EOL;
+var_dump($ac->getScenarios());
+
 
 
 

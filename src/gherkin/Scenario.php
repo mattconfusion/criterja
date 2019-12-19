@@ -2,7 +2,7 @@
 
 namespace Criterja\gherkin;
 
-class Scenario implements CriteriaGroup{
+class Scenario implements CriteriaGroup {
 
     const SCENARIO_TITLE_INDEX = 'title';
     const SCENARIO_STEPS_INDEX = 'steps';
@@ -12,7 +12,7 @@ class Scenario implements CriteriaGroup{
     private $steps = [];
     private $scenarioType;
 
-    public function __construct(ScenarioType $scenarioType, string $title, Step ...$steps)
+    public function __construct(ScenarioType $scenarioType, string $title, ?Step ...$steps)
     {
         $this->scenarioType = $scenarioType;
         $this->title = $title;

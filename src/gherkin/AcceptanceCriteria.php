@@ -7,7 +7,10 @@ use Behat\Gherkin\Parser;
 use Behat\Gherkin\Keywords\ArrayKeywords;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\StepNode;
+use Behat\Gherkin\Node\ScenarioInterface;
 use Criterja\utils\FeatureFile;
+use Criterja\gherkin\Scenario;
+use Criterja\gherkin\ScenarioTypeFactory;
 
 class AcceptanceCriteria
 {
@@ -16,7 +19,7 @@ class AcceptanceCriteria
     public function __construct(FeatureFile $featureFile)
     {
         $this->parsedFile = $this->parseFeatureFile($featureFile->getContents());
-        var_dump($this->parsedFile);
+        //var_dump($this->parsedFile->getScenarios());
     }
 
     /**
@@ -53,9 +56,24 @@ class AcceptanceCriteria
         );
     }
 
-    public function getScenarios()
+    public function getScenarios(): array
     {
-        
+        if (!$this->parsedFile->hasScenarios()) {
+            return [];
+        }
+
+        $scenarios = $this->parsedFile->getScenarios();
+        return \array_map(function (ScenarioInterface $scenario) {
+
+            $steps = $scenario->hasSteps() ? $this->parseSteps(...$scenario->getSteps()) : null;
+
+            return new Scenario(
+                ScenarioTypeFactory::createType($scenario),
+                $scenario->getTitle() ?? '',
+                ...$steps
+            );
+            return 1;
+        }, $scenarios);
     }
 
     /**
