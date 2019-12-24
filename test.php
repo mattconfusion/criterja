@@ -25,10 +25,26 @@ $steps = $ac->getBackground()->getSteps();
 \array_walk($steps, function (Step $step) {
     echo $step->getKeyword() . ' ' . $step->getCondition() . PHP_EOL;
 });
+echo PHP_EOL;
 
-echo "Scenarios" . PHP_EOL;
-var_dump($ac->getScenarios());
+$scenarios = $ac->getScenarios();
+\array_walk($scenarios, function (Scenario $scenario) {
+    echo $scenario->getKeyword() . ': ' . $scenario->getTitle() . PHP_EOL;
+    $steps = $scenario->getSteps();
+    \array_walk($steps, function (Step $step) {
+        echo $step->getKeyword() . ' ' . $step->getCondition() . PHP_EOL;
+    });
 
+    if ($scenario->hasExamples()) {
+        echo PHP_EOL . "Examples: " . PHP_EOL;
+        echo \implode(' - ', $scenario->getExamples()->getColumnsNames()) . PHP_EOL;
+        $rows = $scenario->getExamples()->getRows();
+        \array_walk($rows, function (array $row) {
+            echo \implode(' - ', $row) . PHP_EOL;
+        });
+    }
+    echo PHP_EOL; 
+});
 
 
 

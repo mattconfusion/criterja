@@ -5,7 +5,9 @@ namespace Criterja\gherkin;
 use Behat\Gherkin\Lexer;
 use Behat\Gherkin\Parser;
 use Behat\Gherkin\Keywords\ArrayKeywords;
+use Behat\Gherkin\Node\ExampleTableNode;
 use Behat\Gherkin\Node\FeatureNode;
+use Behat\Gherkin\Node\OutlineNode;
 use Behat\Gherkin\Node\StepNode;
 use Behat\Gherkin\Node\ScenarioInterface;
 use Criterja\utils\FeatureFile;
@@ -19,7 +21,6 @@ class AcceptanceCriteria
     public function __construct(FeatureFile $featureFile)
     {
         $this->parsedFile = $this->parseFeatureFile($featureFile->getContents());
-        //var_dump($this->parsedFile->getScenarios());
     }
 
     /**
@@ -63,16 +64,18 @@ class AcceptanceCriteria
         }
 
         $scenarios = $this->parsedFile->getScenarios();
-        return \array_map(function (ScenarioInterface $scenario) {
 
+        return \array_map(function (ScenarioInterface $scenario) {
             $steps = $scenario->hasSteps() ? $this->parseSteps(...$scenario->getSteps()) : null;
+            $type = ScenarioTypeFactory::createType($scenario);
+            $examples = $type->equals(ScenarioType::SCENARIO_OUTLINE()) ? $this->parseExamples($scenario) : null;
 
             return new Scenario(
-                ScenarioTypeFactory::createType($scenario),
+                $type,
                 $scenario->getTitle() ?? '',
+                $examples,
                 ...$steps
             );
-            return 1;
         }, $scenarios);
     }
 
@@ -93,7 +96,19 @@ class AcceptanceCriteria
     }
 
     /**
-     * Parse the featre file content
+     * Parses the examples for a Scenario Outline
+     *
+     * @param OutlineNode $outlineScenario
+     * @return Table
+     */
+    private function parseExamples(OutlineNode $outlineScenario): Table
+    {
+        $rows = $outlineScenario->getExampleTable()->getRows();
+        return new Table($rows[0], ...\array_slice($rows, 1));
+    }
+
+    /**
+     * Parse the feature file content
      *
      * @param string $featureFileContents
      * @return FeatureNode

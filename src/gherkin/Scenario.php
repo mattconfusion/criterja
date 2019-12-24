@@ -2,6 +2,8 @@
 
 namespace Criterja\gherkin;
 
+use InvalidArgumentException;
+
 class Scenario implements CriteriaGroup {
 
     const SCENARIO_TITLE_INDEX = 'title';
@@ -11,12 +13,18 @@ class Scenario implements CriteriaGroup {
     private $title = '';
     private $steps = [];
     private $scenarioType;
+    private $examples;
 
-    public function __construct(ScenarioType $scenarioType, string $title, ?Step ...$steps)
+    public function __construct(ScenarioType $scenarioType, string $title, ?Table $table, ?Step ...$steps)
     {
         $this->scenarioType = $scenarioType;
         $this->title = $title;
+        $this->examples = $table;
         $this->steps = $steps;
+
+        if (!$this->isValid()) {
+            throw new InvalidArgumentException('Scenario Outlines must have examples, Scenarios must not.');
+        }
     }
 
     public function getTitle(): string
@@ -37,5 +45,16 @@ class Scenario implements CriteriaGroup {
     public function hasExamples(): bool
     {
         return $this->scenarioType->equals(ScenarioType::SCENARIO_OUTLINE());
+    }
+
+    public function getExamples(): Table
+    {
+        return $this->examples;
+    }
+
+    private function isValid()
+    {
+        return ($this->scenarioType->equals(ScenarioType::SCENARIO_OUTLINE()) && $this->examples)
+        || ($this->scenarioType->equals(ScenarioType::SCENARIO()) && !$this->examples); 
     }
 }
