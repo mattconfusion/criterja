@@ -5,7 +5,6 @@ namespace Criterja\gherkin;
 use Behat\Gherkin\Lexer;
 use Behat\Gherkin\Parser;
 use Behat\Gherkin\Keywords\ArrayKeywords;
-use Behat\Gherkin\Node\ExampleTableNode;
 use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\OutlineNode;
 use Behat\Gherkin\Node\StepNode;
@@ -66,6 +65,7 @@ class AcceptanceCriteria
         $scenarios = $this->parsedFile->getScenarios();
 
         return \array_map(function (ScenarioInterface $scenario) {
+            \var_dump($scenario);
             $steps = $scenario->hasSteps() ? $this->parseSteps(...$scenario->getSteps()) : null;
             $type = ScenarioTypeFactory::createType($scenario);
             $examples = $type->equals(ScenarioType::SCENARIO_OUTLINE()) ? $this->parseExamples($scenario) : null;

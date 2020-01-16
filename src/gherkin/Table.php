@@ -28,7 +28,7 @@ class Table {
             if (\count($row) !== $this->columnsCount) {
                 throw new InvalidArgumentException('Row columns do not match table columns');
             }
-            $this->rows[] = $row;
+            $this->rows[] = \preg_replace('/[\x0D]/', '', $row);
         } 
     }
 

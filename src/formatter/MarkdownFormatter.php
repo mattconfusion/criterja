@@ -110,7 +110,7 @@ class MarkdownFormatter implements Formatter {
 
     private function makeTableRow(array $rowValues): string
     {
-        return "| " . \implode(" | ", $rowValues) . " | \r";
+        return "| " . \implode(" | ", $rowValues) . " |";
     }
 
     private function renderAsMultiLineText(array $strings): string
