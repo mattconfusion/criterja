@@ -6,11 +6,13 @@ class Step {
 
     private $keyword;
     private $condition;
+    private $arguments = [];
 
-    public function __construct(string $keyword, string $condition)
+    public function __construct(string $keyword, string $condition, DocStringArgument ...$arguments)
     {
         $this->keyword = $keyword;
         $this->condition = $condition;
+        $this->arguments = $arguments;
     }
 
     public function getKeyword(): string
@@ -21,6 +23,16 @@ class Step {
     public function getCondition(): string
     {
         return $this->condition;
+    }
+
+    public function hasArguments(): bool
+    {
+        return \count($this->arguments) > 0;
+    }
+
+    public function getArguments(): array
+    {
+        return $this->arguments;
     }
 
     public function asArray(): array

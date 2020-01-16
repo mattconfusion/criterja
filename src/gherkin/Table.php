@@ -51,4 +51,14 @@ class Table {
     {
         return $this->rows;
     }
+
+    public function getColumnsCount(): int
+    {
+        return $this->columnsCount;
+    }
+
+    public function getRowsCount(): int
+    {
+        return \count($this->rows);
+    }
 }

@@ -3,6 +3,7 @@
 namespace Criterja\formatter;
 
 use Criterja\gherkin\Background;
+use Criterja\gherkin\DocStringArgument;
 use Criterja\gherkin\Feature;
 use Criterja\gherkin\Scenario;
 use Criterja\gherkin\Table;
@@ -48,7 +49,11 @@ class MarkdownFormatter implements Formatter {
     public function printScenario(Scenario $scenario): string
     {
         $steps = \array_map(function (Step $step) {
-            return $this->padText($this->formatStep($step));
+            $stepline = $this->padText($this->formatStep($step));
+            if ($step->hasArguments()) {
+                $stepline .= "\r\n" . $this->formatArguments(...$step->getArguments());
+            }
+            return $stepline;
         }, $scenario->getSteps());
 
         $this->addSectionTitleToSectionLines(
@@ -63,12 +68,13 @@ class MarkdownFormatter implements Formatter {
     public function printExampleTable(Table $table): string
     {
         $tHead = $this->padText($this->makeTableRow($table->getColumnsNames()));
+        $tHeadSeparator = $this->padText($this->endTableHeader($table->getColumnsCount()));
 
         $rows = \array_map(function (array $row) {
             return $this->padtext($this->makeTableRow($row));
         }, $table->getRows());
         
-        $table = \array_merge([$tHead], $rows);
+        $table = \array_merge([$tHead, $tHeadSeparator], $rows);
         $this->addSectionTitleToSectionLines($this->boldText('Examples'), '', $table);
         return $this->renderAsMultiLineText($table);
     }
@@ -83,10 +89,26 @@ class MarkdownFormatter implements Formatter {
         return $this->boldText($step->getKeyword()) . ' ' . $step->getCondition();
     }
 
+    private function formatArguments(DocStringArgument ...$arguments): string
+    {
+        $snippets = \array_map(function (DocStringArgument $arg) {
+            return $this->codeSnippet(...$arg->getLines());
+        }, $arguments);
+
+        return $this->renderAsMultiLineText($snippets);
+    }
+
     private function addSectionTitleToSectionLines(string $keyword, string $title, array &$sectionLines)
     {
         \array_unshift($sectionLines, $keyword .': ' . $title);
     }
+
+    private function renderAsMultiLineText(array $strings): string
+    {
+        return \implode("\r\n", $strings) . "\r\n";
+    }
+
+    // Markdown formatting
 
     private function italicText(string $text): string
     {
@@ -103,9 +125,9 @@ class MarkdownFormatter implements Formatter {
         return $text ? "  $text" : '';
     }
 
-    private function makeTableCell(string $text): string
+    private function endTableHeader(int $columnsCount): string
     {
-        return $text ? "| $text |" : "| - |";
+        return "| " . \str_repeat(" --- |", $columnsCount);
     }
 
     private function makeTableRow(array $rowValues): string
@@ -113,8 +135,10 @@ class MarkdownFormatter implements Formatter {
         return "| " . \implode(" | ", $rowValues) . " |";
     }
 
-    private function renderAsMultiLineText(array $strings): string
+    private function codeSnippet(string ...$lines): string
     {
-        return \implode("\r\n", $strings) . "\r\n";
+        \array_unshift($lines, '```');
+        $lines[] = '```';
+        return \implode("\n", $lines);
     }
 }

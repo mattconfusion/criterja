@@ -9,6 +9,9 @@ use Behat\Gherkin\Node\FeatureNode;
 use Behat\Gherkin\Node\OutlineNode;
 use Behat\Gherkin\Node\StepNode;
 use Behat\Gherkin\Node\ScenarioInterface;
+use Behat\Gherkin\Node\ArgumentInterface;
+use Behat\Gherkin\Node\NodeInterface;
+use Behat\Gherkin\Node\PyStringNode;
 use Criterja\utils\FeatureFile;
 use Criterja\gherkin\Scenario;
 use Criterja\gherkin\ScenarioTypeFactory;
@@ -65,7 +68,6 @@ class AcceptanceCriteria
         $scenarios = $this->parsedFile->getScenarios();
 
         return \array_map(function (ScenarioInterface $scenario) {
-            \var_dump($scenario);
             $steps = $scenario->hasSteps() ? $this->parseSteps(...$scenario->getSteps()) : null;
             $type = ScenarioTypeFactory::createType($scenario);
             $examples = $type->equals(ScenarioType::SCENARIO_OUTLINE()) ? $this->parseExamples($scenario) : null;
@@ -89,10 +91,22 @@ class AcceptanceCriteria
     {
         $steps = [];
         foreach ($stepnodes as $stepnode) {
-            $steps[] = new Step($stepnode->getKeyword(), $stepnode->getText());
+            $arguments = $stepnode->hasArguments() ? $this->parseStepArguments(...$stepnode->getArguments()) : [];
+            $steps[] = new Step($stepnode->getKeyword(), $stepnode->getText(), ...$arguments);
         }
 
         return $steps;
+    }
+
+    private function parseStepArguments(ArgumentInterface ...$arguments): array
+    {
+        $parsedArguments = [];
+        foreach ($arguments as $arg) {
+            if ($arg instanceof PyStringNode) {
+                $parsedArguments[] = new DocStringArgument(...$arg->getStrings());
+            }
+        }
+        return $parsedArguments;
     }
 
     /**
