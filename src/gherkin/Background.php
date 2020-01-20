@@ -2,7 +2,7 @@
 
 namespace Criterja\gherkin;
 
-class Background implements CriteriaGroup{
+class Background implements CriteriaGroup {
 
     const BACKGROUND_TITLE_INDEX = 'title';
     const BACKGROUND_STEPS_INDEX = 'steps';

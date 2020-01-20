@@ -32,11 +32,13 @@ class MarkdownFormatter implements Formatter {
      */
     public function printBackground(Background $background): string
     {
-        $steps = \array_map(function (Step $step) {
-            return $this->padText($this->formatStep($step));
-        }, $background->getSteps());
+        $steps = $this->formatStepsAndArguments(...$background->getSteps());
 
-        $this->addSectionTitleToSectionLines($this->boldText('Background'), $this->italictext($background->getTitle()), $steps);
+        $this->addSectionTitleToSectionLines(
+            $this->boldText('Background'), 
+            $this->italictext($background->getTitle()), 
+            $steps
+        );
         return $this->renderAsMultiLineText($steps);
     }
 
@@ -48,13 +50,7 @@ class MarkdownFormatter implements Formatter {
      */
     public function printScenario(Scenario $scenario): string
     {
-        $steps = \array_map(function (Step $step) {
-            $stepline = $this->padText($this->formatStep($step));
-            if ($step->hasArguments()) {
-                $stepline .= "\r\n" . $this->formatArguments(...$step->getArguments());
-            }
-            return $stepline;
-        }, $scenario->getSteps());
+        $steps = $this->formatStepsAndArguments(...$scenario->getSteps());
 
         $this->addSectionTitleToSectionLines(
             $this->boldText($scenario->getKeyword()),
@@ -82,6 +78,23 @@ class MarkdownFormatter implements Formatter {
     public function printSectionBreak(): string
     {
         return "\r\n\r\n";
+    }
+
+    /**
+     * Formats steps and arguments in an array of strings
+     *
+     * @param Step ...$steps
+     * @return array
+     */
+    private function formatStepsAndArguments(Step ...$steps): array
+    {
+        return \array_map(function (Step $step) {
+            $stepline = $this->padText($this->formatStep($step));
+            if ($step->hasArguments()) {
+                $stepline .= "\r\n" . $this->formatArguments(...$step->getArguments());
+            }
+            return $stepline;
+        }, $steps);
     }
 
     private function formatStep(Step $step): string
