@@ -21,4 +21,14 @@ class FileWriter {
             throw new WriteErrorException();
         }
     }
+
+    public function getFileName(): string
+    {
+        return $this->fullPathToFile;
+    }
+
+    public function getFileContents(): string
+    {
+        return $this->getFileContents();
+    }
 }
