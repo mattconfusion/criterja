@@ -6,7 +6,6 @@ use Criterja\formatter\FormatType;
 use Criterja\utils\FeatureFile;
 use Criterja\gherkin\AcceptanceCriteria;
 use Criterja\utils\FormatConverterFactory;
-use Criterja\utils\FileWriter;
 use Criterja\utils\FileWriterFactory;
 
 class App {
@@ -25,7 +24,7 @@ class App {
         $converter = FormatConverterFactory::createConverter($ac, $outputFormat);
         $writer = FileWriterFactory::createFileWriter(
             $outputFormat, 
-            (\pathinfo($filename))['filename'],
+            $filename,
             $converter->convert()
         );
         $writer->write();

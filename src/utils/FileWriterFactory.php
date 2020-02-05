@@ -6,7 +6,7 @@ use Criterja\formatter\FormatType;
 
 class FileWriterFactory {
 
-    public function createFileWriter(FormatType $format, string $filename, string $contents): FileWriter
+    public static function createFileWriter(FormatType $format, string $filename, string $contents): FileWriter
     {
         switch ($format) {
             case FormatType::MARKDOWN():
@@ -14,6 +14,11 @@ class FileWriterFactory {
                 $extension = FileExtension::MARKDOWN();
         }
 
-        return new FileWriter($filename . '.' . $extension, $contents);
+        $fileToCreate = \explode(
+            \pathinfo($filename, PATHINFO_EXTENSION),
+            $filename
+        )[0] . $extension;
+
+        return new FileWriter($fileToCreate, $contents);
     }
 }
