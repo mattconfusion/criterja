@@ -7,7 +7,6 @@
     "require": {
         "behat/gherkin": "^4.6",
         "league/climate": "^3.5",
-        "myclabs/php-enum": "^1.7",
-        "maddhatter/markdown-table": "^1.0"
+        "myclabs/php-enum": "^1.7"
     }
 }
