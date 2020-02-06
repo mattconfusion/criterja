@@ -123,9 +123,9 @@ class CriterjaCli
      */
     private function getOutputFormat(string $format): FormatType
     {
-        if ($format === self::OUTPUT_HTML) {
-            throw new CliException('HTML conversion has not been implemented. Yet.');
-        }
+        // if ($format === self::OUTPUT_HTML) {
+        //     throw new CliException('HTML conversion has not been implemented. Yet.');
+        // }
 
         if (!\in_array($format, $this->availableFormats)) {
             throw new CliException(\sprintf('%s is not a valid output format', $format));

@@ -9,6 +9,8 @@ class FileWriterFactory {
     public static function createFileWriter(FormatType $format, string $filename, string $contents): FileWriter
     {
         switch ($format) {
+            case FormatType::HTML():
+                $extension = FileExtension::HTML();
             case FormatType::MARKDOWN():
             default:
                 $extension = FileExtension::MARKDOWN();

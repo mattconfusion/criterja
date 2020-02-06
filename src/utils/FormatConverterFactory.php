@@ -3,6 +3,7 @@
 namespace Criterja\utils;
 
 use Criterja\formatter\FormatType;
+use Criterja\formatter\HtmlFormatter;
 use Criterja\formatter\MarkdownFormatter;
 use Criterja\gherkin\AcceptanceCriteria;
 
@@ -19,7 +20,9 @@ class FormatConverterFactory {
     {
         switch ($type) {
             case FormatType::MARKDOWN(): 
-                return new FormatConverter($ac, new MarkdownFormatter());    
-        }   
+                return new FormatConverter($ac, new MarkdownFormatter());
+            case FormatType::HTML():
+                return new FormatConverter($ac, new HtmlFormatter());        
+        }
     }
 }
