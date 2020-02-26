@@ -144,7 +144,7 @@ class MarkdownFormatter implements Formatter {
             return " | --- | ";
         }
 
-        return \implode(" | ", \array_fill(0, $columnsCount, '---'));
+        return \implode(" | ", \array_fill(0, $columnsCount, '---')) . ' |';
     }
 
     private function makeTableRow(array $rowValues): string
@@ -153,7 +153,7 @@ class MarkdownFormatter implements Formatter {
             return " | {$rowValues[0]} | ";
         }
 
-        return \implode(" | ", $rowValues);
+        return \implode(" | ", $rowValues) . ' |';
     }
 
     private function codeSnippet(string ...$lines): string
