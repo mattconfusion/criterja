@@ -15,7 +15,7 @@ use League\CLImate\CLImate;
 */
 
 require_once __DIR__ . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
-error_reporting(0);
+//error_reporting(0);
 
 $cli = new CriterjaCli(
     new CLImate(),
