@@ -140,16 +140,20 @@ class MarkdownFormatter implements Formatter {
 
     private function endTableHeader(int $columnsCount): string
     {
-        return \implode(" | ", \array_fill(0, $columnsCount, '---'));
+        return \implode(" | ", \array_fill(0, $columnsCount, '---')) . ' |';
     }
 
     private function makeTableRow(array $rowValues): string
     {
-        return \implode(" | ", $rowValues);
+        return \implode(" | ", $rowValues) . ' |';
     }
 
     private function codeSnippet(string ...$lines): string
     {
+        if (\count($lines) === 0) {
+            $lines[] = " ";
+        }
+
         \array_unshift($lines, '```');
         $lines[] = '```';
         return \implode("\n", $lines);

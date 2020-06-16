@@ -26,9 +26,13 @@ class FormatConverter {
         $this->convertedString =  $this->formatter->printFeature($this->ac->getFeature());
         $this->convertedString .= $this->formatter->printSectionBreak();
         
-        $this->convertedString .= $this->formatter->printBackground($this->ac->getBackground());
-        $this->convertedString .= $this->formatter->printSectionBreak();
-        
+        $background = $this->ac->getBackground();
+
+        if ($background) {
+            $this->convertedString .= $this->formatter->printBackground($background);
+            $this->convertedString .= $this->formatter->printSectionBreak();
+        }
+
         $scenarios = $this->ac->getScenarios(); 
         \array_walk($scenarios, function (Scenario $scenario) {
             $this->convertedString .=  $this->formatter->printScenario($scenario);
