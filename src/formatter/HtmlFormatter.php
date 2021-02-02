@@ -65,23 +65,20 @@ class HtmlFormatter implements Formatter
 
     public function printExampleTable(Table $table): string
     {
-        $tHead = $this->padText(
-            $this->padText('<table>') . PHP_EOL
-            . $this->makeTableHeader($table->getColumnsNames())
-        );
+        $tHead =  PHP_EOL . '<table>' . PHP_EOL . $this->makeTableHeader($table->getColumnsNames());
         
         $rows = \array_map(function (array $row) {
-            return $this->padtext($this->makeTableRow($row));
+            return $this->makeTableRow($row);
         }, $table->getRows());
         
-        $table = \array_merge([$tHead], $rows, ['</table>' . PHP_EOL]);
+        $table = \array_merge([$tHead], $rows, ['</table>']);
         $this->addSectionTitleToSectionLines($this->boldText('Examples'), '', $table);
         return \implode('', $table);
     }
 
     public function printSectionBreak(): string
     {
-        return "<br><br>";
+        return '<br><br>';
     }
 
     /**
@@ -95,7 +92,7 @@ class HtmlFormatter implements Formatter
         return \array_map(function (Step $step) {
             $stepline = $this->padText($this->formatStep($step));
             if ($step->hasArguments()) {
-                $stepline .= "<br>" . $this->formatArguments(...$step->getArguments());
+                $stepline .= '<br>' . $this->formatArguments(...$step->getArguments());
             }
             return $stepline;
         }, $steps);
@@ -122,7 +119,7 @@ class HtmlFormatter implements Formatter
 
     private function renderAsMultiLineText(array $strings): string
     {
-        return \implode("<br>" . PHP_EOL, $strings) . PHP_EOL;
+        return \implode('<br>' . PHP_EOL, $strings) . PHP_EOL;
     }
 
     // HTML formatting
@@ -145,7 +142,7 @@ class HtmlFormatter implements Formatter
     {
         $rowCode = '<thead><tr>' . PHP_EOL;
         foreach ($rowValues as $val) {
-            $rowCode .= "  <th>" . $val . '</th>';
+            $rowCode .= '  <th>' . $val . '</th>';
         }
         $rowCode .= '</tr></thead>'  . PHP_EOL;
         return $rowCode;
@@ -155,7 +152,7 @@ class HtmlFormatter implements Formatter
     {
         $rowCode = '<tr>' . PHP_EOL;
         foreach ($rowValues as $val) {
-            $rowCode .= "  <td>" . $val . '</td>';
+            $rowCode .= '  <td>' . $val . '</td>';
         }
         $rowCode .= '</tr>'  . PHP_EOL;
         return $rowCode;
@@ -163,8 +160,12 @@ class HtmlFormatter implements Formatter
 
     private function codeSnippet(string ...$lines): string
     {
-        \array_unshift($lines, '<pre>');
-        $lines[] = "</pre>";
-        return \implode("<br>", $lines);
+        \array_walk($lines, function (&$line) {
+            $line = $line . PHP_EOL;
+        });
+
+        \array_unshift($lines, PHP_EOL .'<pre>');
+        $lines[] = '</pre>';
+        return \implode('', $lines);
     }
 }
