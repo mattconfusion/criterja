@@ -74,9 +74,9 @@ class HtmlFormatter implements Formatter
             return $this->padtext($this->makeTableRow($row));
         }, $table->getRows());
         
-        $table = \implode('', \array_merge([$tHead], $rows, ['</table>' . PHP_EOL]));
+        $table = \array_merge([$tHead], $rows, ['</table>' . PHP_EOL]);
         $this->addSectionTitleToSectionLines($this->boldText('Examples'), '', $table);
-        return $table;
+        return \implode('', $table);
     }
 
     public function printSectionBreak(): string
