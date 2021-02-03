@@ -11,6 +11,7 @@ class FileWriterFactory {
         switch ($format) {
             case FormatType::HTML():
                 $extension = FileExtension::HTML();
+                break;
             case FormatType::MARKDOWN():
             default:
                 $extension = FileExtension::MARKDOWN();
@@ -20,7 +21,7 @@ class FileWriterFactory {
             \pathinfo($filename, PATHINFO_EXTENSION),
             $filename
         )[0] . $extension;
-
+        
         return new FileWriter($fileToCreate, $contents);
     }
 }
