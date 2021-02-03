@@ -71,7 +71,7 @@ class CriterjaCli
 
             // show help
             if ($this->cli->arguments->get('help')) {
-                throw new HelpRequestException();
+                $this->cli->br()->br()->usage();
             }
 
             $output = $this->getOutputFormat(
@@ -93,8 +93,6 @@ class CriterjaCli
 
         } catch (CliException $ex) {
             $this->cli->br()->error($ex->getMessage());
-        } catch (HelpRequestException $ex) {
-            $this->cli->br()->usage();
         } catch (InvalidArgumentException $ex) {
             $this->cli->br()->error($ex->getMessage());
             $this->cli->br()->br()->usage();
@@ -123,10 +121,6 @@ class CriterjaCli
      */
     private function getOutputFormat(string $format): FormatType
     {
-        // if ($format === self::OUTPUT_HTML) {
-        //     throw new CliException('HTML conversion has not been implemented. Yet.');
-        // }
-
         if (!\in_array($format, $this->availableFormats)) {
             throw new CliException(\sprintf('%s is not a valid output format', $format));
         }
