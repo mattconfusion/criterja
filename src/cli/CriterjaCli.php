@@ -142,5 +142,7 @@ class CriterjaCli
             case self::OUTPUT_HTML:
                 return FormatType::HTML();
         }
+
+        return FormatType::MARKDOWN();
     }
 }

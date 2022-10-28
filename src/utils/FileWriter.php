@@ -29,6 +29,6 @@ class FileWriter {
 
     public function getFileContents(): string
     {
-        return $this->getFileContents();
+        return $this->contents;
     }
 }

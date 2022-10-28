@@ -15,7 +15,7 @@ class Scenario implements CriteriaGroup {
     private $scenarioType;
     private $examples;
 
-    public function __construct(ScenarioType $scenarioType, string $title, ?Table $table, ?Step ...$steps)
+    public function __construct(ScenarioType $scenarioType, string $title, Table $table, ?Step ...$steps)
     {
         $this->scenarioType = $scenarioType;
         $this->title = $title;

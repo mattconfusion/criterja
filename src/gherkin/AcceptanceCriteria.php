@@ -10,7 +10,6 @@ use Behat\Gherkin\Node\OutlineNode;
 use Behat\Gherkin\Node\StepNode;
 use Behat\Gherkin\Node\ScenarioInterface;
 use Behat\Gherkin\Node\ArgumentInterface;
-use Behat\Gherkin\Node\NodeInterface;
 use Behat\Gherkin\Node\PyStringNode;
 use Criterja\utils\FeatureFile;
 use Criterja\gherkin\Scenario;
@@ -70,7 +69,11 @@ class AcceptanceCriteria
         return \array_map(function (ScenarioInterface $scenario) {
             $steps = $scenario->hasSteps() ? $this->parseSteps(...$scenario->getSteps()) : null;
             $type = ScenarioTypeFactory::createType($scenario);
-            $examples = $type->equals(ScenarioType::SCENARIO_OUTLINE()) ? $this->parseExamples($scenario) : null;
+            $examples = new Table([],[]);
+
+            if ($type->equals(ScenarioType::SCENARIO_OUTLINE()) && ($scenario instanceof OutlineNode)) {
+                $examples = $this->parseExamples($scenario);
+            }
 
             return new Scenario(
                 $type,

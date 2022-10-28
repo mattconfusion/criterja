@@ -19,10 +19,11 @@ class FormatConverterFactory {
     public static function createConverter(AcceptanceCriteria $ac, FormatType $type): FormatConverter
     {
         switch ($type) {
-            case FormatType::MARKDOWN(): 
-                return new FormatConverter($ac, new MarkdownFormatter());
             case FormatType::HTML():
-                return new FormatConverter($ac, new HtmlFormatter());        
+                return new FormatConverter($ac, new HtmlFormatter());
+            case FormatType::MARKDOWN():
+            default: 
+                return new FormatConverter($ac, new MarkdownFormatter());
         }
     }
 }
