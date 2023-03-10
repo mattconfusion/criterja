@@ -47,6 +47,11 @@ class CriterjaCli
                 'description'  => 'Output format, either ' . self::OUTPUT_MARKDOWN . ' or ' . self::OUTPUT_HTML,
                 'defaultValue' => self::OUTPUT_MARKDOWN
             ],
+            'update on Jira' => [
+                'prefix'       => 'j',
+                'longPrefix'   => 'send2jira',
+                'description'  => 'Send the issue to an existing one in Jira'
+            ],
             'help' => [
                 'prefix'       => 'h',
                 'longPrefix'   => 'help',
