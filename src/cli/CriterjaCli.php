@@ -8,6 +8,8 @@ use Criterja\formatter\FormatType;
 use Criterja\utils\WriteErrorException;
 use League\CLImate\Exceptions\InvalidArgumentException;
 use phpDocumentor\Reflection\Types\Boolean;
+use CriterjaConfig;
+use phpDocumentor\Reflection\Types\Null_;
 
 class CriterjaCli
 {
@@ -48,12 +50,11 @@ class CriterjaCli
                 'description'  => 'Output format, either ' . self::OUTPUT_MARKDOWN . ' or ' . self::OUTPUT_HTML,
                 'defaultValue' => self::OUTPUT_MARKDOWN
             ],
-            'update on jira' => [
+            'jira_issue' => [
                 'prefix'       => 'j',
                 'longPrefix'   => 'jiraupdate',
-                'description'  => 'Send the gherkin to a specified field in an existing issue in Jira',
-                'defaultValue' => "false",
-                'castTo' => 'bool'
+                'description'  => 'Send the gherkin to a specified field in an existing Jira issue',
+                'castTo' => 'string'
             ],
             'help' => [
                 'prefix'       => 'h',
@@ -85,6 +86,8 @@ class CriterjaCli
             $output = $this->getOutputFormat(
                 $this->cli->arguments->get('output')
             );
+
+            $jiraIssue = $this->cli->arguments->get('jira_issue');
 
             //start the thing
             $results = $this->app->run(
@@ -150,5 +153,17 @@ class CriterjaCli
             case self::OUTPUT_HTML:
                 return FormatType::HTML();
         }
+    }
+
+    private function checkConfigFileForJira(): bool
+    {
+        $configFile = \file_get_contents('/config/config.json');
+        if ($configFile) {
+            $config = \json_decode($configFile);
+            if (\property_exists($config, 'jira')) {
+                return true;
+            }
+        }
+        return false;
     }
 }
