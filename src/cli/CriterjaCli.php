@@ -7,6 +7,7 @@ use Criterja\App;
 use Criterja\formatter\FormatType;
 use Criterja\utils\WriteErrorException;
 use League\CLImate\Exceptions\InvalidArgumentException;
+use phpDocumentor\Reflection\Types\Boolean;
 
 class CriterjaCli
 {
@@ -47,10 +48,12 @@ class CriterjaCli
                 'description'  => 'Output format, either ' . self::OUTPUT_MARKDOWN . ' or ' . self::OUTPUT_HTML,
                 'defaultValue' => self::OUTPUT_MARKDOWN
             ],
-            'update on Jira' => [
+            'update on jira' => [
                 'prefix'       => 'j',
-                'longPrefix'   => 'send2jira',
-                'description'  => 'Send the issue to an existing one in Jira'
+                'longPrefix'   => 'jiraupdate',
+                'description'  => 'Send the gherkin to a specified field in an existing issue in Jira',
+                'defaultValue' => "false",
+                'castTo' => 'bool'
             ],
             'help' => [
                 'prefix'       => 'h',

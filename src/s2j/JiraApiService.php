@@ -4,6 +4,6 @@ namespace Criterja\s2j;
 
 interface JiraApiService {
 
-    public function getAcceptanceCriteriaFieldId();
+    //public function getAcceptanceCriteriaFieldId();
     public function updateIssue();
 }

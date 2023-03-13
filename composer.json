@@ -1,7 +1,8 @@
 {
     "autoload": {
         "psr-4": {
-            "Criterja\\": "src/"
+            "Criterja\\": "src/",
+            "Config\\": "config/"
         }
     },
     "require": {
